@@ -101,16 +101,16 @@ func (tree *BinaryTree) heightByIter(node *BinaryTreeNode) (height int) {
 		return 0
 	}
 	que := NewSimpleQueue()
-	que.Order(node)
+	que.Offer(node)
 	size := que.Len()
 	for que.Len() != 0 {
 		node := que.Poll().(*BinaryTreeNode)
 		size--
 		if node.left != nil {
-			que.Order(node.left)
+			que.Offer(node.left)
 		}
 		if node.right != nil {
-			que.Order(node.right)
+			que.Offer(node.right)
 		}
 		if size == 0 {
 			height++
@@ -128,7 +128,7 @@ func (tree *BinaryTree) getTreeNodeIndexMap() (nodeIndexMap map[int]map[int]inte
 	}
 	node.tmpIndex = 0
 	que := NewSimpleQueue()
-	que.Order(node)
+	que.Offer(node)
 	size := que.Len()
 	height = 0
 	//获取元素最大字符长度
@@ -148,11 +148,11 @@ func (tree *BinaryTree) getTreeNodeIndexMap() (nodeIndexMap map[int]map[int]inte
 		size--
 		if node.left != nil {
 			node.left.tmpIndex = 2*node.tmpIndex + 1
-			que.Order(node.left)
+			que.Offer(node.left)
 		}
 		if node.right != nil {
 			node.right.tmpIndex = 2*node.tmpIndex + 2
-			que.Order(node.right)
+			que.Offer(node.right)
 		}
 		if size == 0 {
 			height++
@@ -331,7 +331,7 @@ func (tree *BinaryTree) isLeaf(node *BinaryTreeNode) bool {
 func (tree *BinaryTree) IsCompete() bool {
 	node := tree.Root
 	que := NewSimpleQueue()
-	que.Order(node)
+	que.Offer(node)
 	mustLeaf := false
 	for que.Len() != 0 {
 		node := que.Poll().(*BinaryTreeNode)
@@ -339,12 +339,12 @@ func (tree *BinaryTree) IsCompete() bool {
 			return false
 		}
 		if node.left != nil {
-			que.Order(node.left)
+			que.Offer(node.left)
 		} else if node.right != nil {
 			return false
 		}
 		if node.right != nil {
-			que.Order(node.right)
+			que.Offer(node.right)
 		} else {
 			mustLeaf = true
 		}
@@ -444,17 +444,17 @@ func (tree *BinaryTree) levelOrder(node *BinaryTreeNode, visitor *visitorWrap) {
 		return
 	}
 	que := NewSimpleQueue()
-	que.Order(node)
+	que.Offer(node)
 	for que.Len() != 0 {
 		node := que.Poll().(*BinaryTreeNode)
 		if tree.visit(node, visitor) {
 			return
 		}
 		if node.left != nil {
-			que.Order(node.left)
+			que.Offer(node.left)
 		}
 		if node.right != nil {
-			que.Order(node.right)
+			que.Offer(node.right)
 		}
 	}
 }

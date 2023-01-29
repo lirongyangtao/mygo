@@ -2,6 +2,9 @@ package path_finding
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"time"
 )
 
 const (
@@ -135,6 +138,50 @@ func (grid *Grid) getNodeAt(X int, Y int) *GridNode {
 func (grid *Grid) Clone() *Grid {
 	return nil
 }
+func (grid *Grid) PathFindingRoute(cmd PathFindingType) (cmdFunc PathFindingCmd) {
+	wrap := func(f PathFindingCmd) PathFindingCmd {
+		return func(startX, startY, endX, endY int) (res []*GridNodeInfo) {
+			begin := time.Now()
+			res = f(startX, startY, endX, endY)
+			since := time.Since(begin)
+			fmt.Printf("%v: 耗时:%v\n", cmd, since)
+			return res
+		}
+	}
+	switch cmd {
+	case AStar:
+		cmdFunc = grid.PathFindingAStar
+	case IdAStar:
+		cmdFunc = grid.PathFindingIdaStar
+	case Dijkstra:
+		cmdFunc = grid.PathFindingDijkstra
+	case BestFirst:
+		cmdFunc = grid.PathFindingBestFirst
+	case BreadthFirst:
+		cmdFunc = grid.PathFindingBreadthFirst
+	case JumpPoint:
+		cmdFunc = grid.PathFindingJumpPoint
+	case JPFNeverMoveDiagonally:
+		cmdFunc = grid.PathFindingJPFNeverMoveDiagonally
+	case JPFMoveDiagonallyIfNoObstacles:
+		cmdFunc = grid.PathFindingJPFMoveDiagonallyIfNoObstacles
+	case JPFMoveDiagonallyIfAtMostOneObstacle:
+		cmdFunc = grid.PathFindingJPFMoveDiagonallyIfAtMostOneObstacle
+	case JPFAlwaysMoveDiagonally:
+		cmdFunc = grid.PathFindingJPFAlwaysMoveDiagonally
+	case BiAStar:
+		cmdFunc = grid.PathFindingBiAStar
+	case BiBreadthFirst:
+		cmdFunc = grid.PathFindingBiBreadthFirst
+	case BiBestFirst:
+		cmdFunc = grid.PathFindingBiBestFirst
+	case BiDijkstra:
+		cmdFunc = grid.PathFindingBiDijkstra
+	default:
+		panic("error cmd")
+	}
+	return wrap(cmdFunc)
+}
 
 /**
  * Get the neighbors of the given node.
@@ -230,25 +277,23 @@ func (grid *Grid) getNeighbors(node *GridNode, diagonalMovement DiagonalMovement
 	return
 }
 
-func (grid *Grid) PathFindingPrint(startX, startY, endX, endY int) {
+func (grid *Grid) PathFindingPrint(cmd PathFindingType, startX, startY, endX, endY int) {
 	arr := grid.getPrintMap()
 	arr[startX][startY] = "\033[32ms\033[0m"
 	arr[endX][endY] = "\033[31me\033[0m"
-	paths := grid.PathFindingAStar(startX, startY, endX, endY)
+	paths := grid.PathFindingRoute(cmd)(startX, startY, endX, endY)
 	for i := len(paths) - 2; i >= 0; i-- {
 		path := paths[i]
 		arr[path.X][path.Y] = "\u001B[34mw\u001B[0m"
 
 	}
-	grid.print(arr)
+	grid.print(arr, true)
 }
 
 // 终端打印地图
 func (grid *Grid) PrintMap() {
-	fmt.Println("==================================map============================")
 	arr := grid.getPrintMap()
 	grid.print(arr)
-	fmt.Println("==================================map============================")
 }
 
 func (grid *Grid) getPrintMap() (arr [][]string) {
@@ -268,7 +313,15 @@ func (grid *Grid) getPrintMap() (arr [][]string) {
 	return
 }
 
-func (grid *Grid) print(arr [][]string) {
+func (grid *Grid) printClear() {
+	cmd := exec.Command("cmd", "/c", "cls")
+	cmd.Stdout = os.Stdout
+	err := cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+}
+func (grid *Grid) print(arr [][]string, enablePrint ...bool) string {
 	str := ""
 	for i := 0; i < grid.Height; i++ {
 		for j := 0; j < grid.Width; j++ {
@@ -276,5 +329,8 @@ func (grid *Grid) print(arr [][]string) {
 		}
 		str += "\n"
 	}
-	fmt.Printf("\r%v", str)
+	if len(enablePrint) > 0 && enablePrint[0] {
+		fmt.Printf("\r%v", str)
+	}
+	return str
 }

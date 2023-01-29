@@ -203,7 +203,7 @@ func (g *graph) Bfs(v interface{}, visitor GraphVisitor) {
 	}
 	hasVisitor := map[*Vertex]struct{}{}
 	queue := NewSimpleQueue()
-	queue.Order(V)
+	queue.Offer(V)
 	hasVisitor[V] = struct{}{}
 	for !queue.Empty() {
 		ele := queue.Poll()
@@ -215,7 +215,7 @@ func (g *graph) Bfs(v interface{}, visitor GraphVisitor) {
 			if _, ok := hasVisitor[v.To]; ok {
 				continue
 			}
-			queue.Order(v.To)
+			queue.Offer(v.To)
 			hasVisitor[v.To] = struct{}{}
 		}
 	}
@@ -258,7 +258,7 @@ func (g *graph) TopLogicSort() (res []interface{}) {
 	m := map[*Vertex]int{}
 	for _, v := range g.vertexes {
 		if len(v.InEdges) == 0 {
-			queue.Order(v)
+			queue.Offer(v)
 			continue
 		}
 		m[v] = len(v.InEdges)
@@ -271,7 +271,7 @@ func (g *graph) TopLogicSort() (res []interface{}) {
 		for _, v := range V.OutEdges {
 			m[v.To]--
 			if m[v.To] == 0 {
-				queue.Order(v.To)
+				queue.Offer(v.To)
 				delete(m, v.To)
 				continue
 			}

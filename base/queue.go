@@ -7,7 +7,7 @@ import (
 
 type Queue interface {
 	Poll() (ele interface{})
-	Order(ele interface{})
+	Offer(ele interface{})
 	Len() int
 	Empty() bool
 }
@@ -27,7 +27,7 @@ func (q *SimpleQueue) Poll() (ele interface{}) {
 	q.elements = q.elements[1:]
 	return ele
 }
-func (q *SimpleQueue) Order(ele interface{}) {
+func (q *SimpleQueue) Offer(ele interface{}) {
 	q.elements = append(q.elements, ele)
 }
 func (q *SimpleQueue) Len() int {
@@ -60,7 +60,7 @@ func (q *lockFreeQueue) Poll() (ele interface{}) {
 	//head := q.Load(&q.head)
 	return nil
 }
-func (q *lockFreeQueue) Order(ele interface{}) {
+func (q *lockFreeQueue) Offer(ele interface{}) {
 	//newNode := queueNode{
 	//	Value: ele,
 	//}
