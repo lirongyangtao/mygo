@@ -37,6 +37,7 @@ func gridFromString(str string) {
 	grid.PathFindingPrint(path_finding.BestFirst, startX, startY, endX, endY)
 	grid.PathFindingPrint(path_finding.BiBestFirst, startX, startY, endX, endY)
 	grid.PathFindingPrint(path_finding.BreadthFirst, startX, startY, endX, endY)
+	grid.PathFindingPrint(path_finding.BiBreadthFirst, startX, startY, endX, endY)
 }
 
 // a*算法
