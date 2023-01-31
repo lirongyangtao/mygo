@@ -1,7 +1,8 @@
 package main
 
 import (
-	"awesomeProject5/example"
+	"awesomeProject5/base"
+	"fmt"
 )
 
 func main() {
@@ -20,5 +21,8 @@ func main() {
 	//fmt.Println(rax.Find("ANNIBALExxxxx"))
 	//fmt.Println(rax.Find("ANNIBALI"))
 	//fmt.Println(rax.Find("AGO"))
-	example.AStar()
+
+	arr := &base.SortInt{99, 1, 2, 3, 7, 4, 5}
+	base.InsertSort(arr)
+	fmt.Println(arr)
 }
