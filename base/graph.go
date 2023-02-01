@@ -296,7 +296,7 @@ func (g *graph) toEdgeInfoSlice(data []*Edge) (res []*EdgeInfo) {
 
 // prim 算法找最短路径
 func (g *graph) Prim(ele interface{}) []*EdgeInfo {
-	heap := NewFourHeap(func(e1 interface{}, e2 interface{}) int32 {
+	heap := NewQuadHeap(func(e1 interface{}, e2 interface{}) int32 {
 		if e1.(*Edge).Weight < e2.(*Edge).Weight {
 			return E1LessE2
 		} else if e1.(*Edge).Weight > e2.(*Edge).Weight {
@@ -333,7 +333,7 @@ func (g *graph) Prim(ele interface{}) []*EdgeInfo {
 }
 func (g *graph) Kruskal() []*EdgeInfo {
 	var edges []*Edge
-	heap := NewFourHeap(func(e1 interface{}, e2 interface{}) int32 {
+	heap := NewQuadHeap(func(e1 interface{}, e2 interface{}) int32 {
 		if e1.(*Edge).Weight < e2.(*Edge).Weight {
 			return E1LessE2
 		} else if e1.(*Edge).Weight > e2.(*Edge).Weight {

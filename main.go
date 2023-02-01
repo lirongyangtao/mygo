@@ -23,6 +23,6 @@ func main() {
 	//fmt.Println(rax.Find("AGO"))
 
 	arr := &base.SortInt{99, 1, 2, 3, 7, 4, 5}
-	base.InsertSort(arr)
+	base.HeapSort(arr)
 	fmt.Println(arr)
 }

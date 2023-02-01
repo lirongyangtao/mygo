@@ -123,7 +123,7 @@ func insertSort(lessSwap *lessSwap) {
 	}
 }
 
-//优化：i 往前挪动的时候进行二分搜索
+// 优化：i 往前挪动的时候进行二分搜索
 func insertSort1(lessSwap *lessSwap) {
 	for i := 1; i < lessSwap.Length; i++ {
 		for j := i; j > 0; j-- {
@@ -137,20 +137,21 @@ func insertSort1(lessSwap *lessSwap) {
 // ================================堆排序====================================
 func HeapSort(s sortI) {
 	lessSwap := checkAndGetSliceLen(s)
-	heapSort(lessSwap)
+	heapSort(lessSwap, 0, lessSwap.Length)
 }
 
 // 找出最大值和最后一个交换
-func heapSort(lessSwap *lessSwap) {
-	heap := NewFourHeap(func(e1 interface{}, e2 interface{}) int32 {
-		return lessSwap.Less(e1.(int), e2.(int))
-	})
-	for i := 0; i < lessSwap.Length; i++ {
-		heap.Add(i)
+func heapSort(lessSwap *lessSwap, a, b int) {
+	first := a
+	lo := 0
+	hi := b - a
+	for i := (hi - 1) >> 1; i >= 0; i-- {
+		binaryShiftDown(lessSwap, i, hi, first)
 	}
-	for heap.Len() != 1 {
-		index := heap.Pop().(int)
-		lessSwap.Swap(index, heap.Len())
+
+	for i := hi - 1; i >= 0; i-- {
+		lessSwap.Swap(first, first+i)
+		binaryShiftDown(lessSwap, lo, i, first)
 	}
 }
 
