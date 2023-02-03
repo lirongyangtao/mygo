@@ -22,7 +22,12 @@ func main() {
 	//fmt.Println(rax.Find("ANNIBALI"))
 	//fmt.Println(rax.Find("AGO"))
 
-	arr := &base.SortInt{99, 1, 2, 3, 7, 4, 5}
-	base.HeapSort(arr)
+	//arr := &base.SortInt{99, 1, 2, 3, 7, 4, 5}
+
+	arr := []int{99, 1, 2, 3, 7, 4, 5}
+	//base.QuickSort(arr)
+	//base.InsertSort1(arr)
+	//fmt.Println(base.BinarySearch(arr, 100))
+	base.InsertSort1(arr)
 	fmt.Println(arr)
 }
