@@ -6,7 +6,7 @@ import (
 )
 
 func ExampleHeap() {
-	heap := base.NewFourHeap(base.CmInt)
+	heap := base.NewQuadHeap(base.CmInt)
 	heap.Add(199)
 	heap.Add(99)
 	heap.Add(3000)

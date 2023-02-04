@@ -119,6 +119,13 @@ func InsertSort(s sortI) {
 
 func insertSort(lessSwap *lessSwap) {
 	for i := 1; i < lessSwap.Length; i++ {
+		index := binarySearchForInsertMerge1(lessSwap, 0, i, i)
+		lessSwap.Swap(index, i)
+	}
+}
+
+func insertSort0(lessSwap *lessSwap) {
+	for i := 1; i < lessSwap.Length; i++ {
 		for j := i; j > 0; j-- {
 			if lessSwap.Less(j, j-1) == E1GenerateE2 {
 				lessSwap.Swap(j, j-1)

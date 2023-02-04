@@ -5,7 +5,7 @@ import "testing"
 func NewHeap(t int) Heap {
 	switch t {
 	case 4:
-		return NewFourHeap(CmInt)
+		return NewQuadHeap(CmInt)
 	}
 	return NewBinaryHeap(CmInt)
 }
