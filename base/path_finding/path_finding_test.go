@@ -14,50 +14,56 @@ import "testing"
 
 // ===========================================================性能测试==================================
 // go test -bench="^BenchmarkPathFinding" .
+
+const (
+	CycleTimes = 100
+)
+
 func BenchmarkPathFindingAStar(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(AStar, 1000)
+		PathFinding(AStar, CycleTimes)
 	}
 }
 
 func BenchmarkPathFindingDijkstra(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(Dijkstra, 1000)
+		PathFinding(Dijkstra, CycleTimes)
 	}
 }
 func BenchmarkPathFindingBestFirst(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(BestFirst, 1000)
+		PathFinding(BestFirst, CycleTimes)
 	}
 }
 func BenchmarkPathFindingBreadthFirst(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(BreadthFirst, 1000)
+		PathFinding(BreadthFirst, CycleTimes)
 	}
 }
 func BenchmarkPathFindingBiAStar(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(BiAStar, 1000)
+		PathFinding(BiAStar, CycleTimes)
 	}
 }
 func BenchmarkPathFindingBiBreadthFirst(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(BiBreadthFirst, 1000)
+		PathFinding(BiBreadthFirst, CycleTimes)
 	}
 }
 func BenchmarkPathFindingBiBestFirst(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(BiBestFirst, 1000)
+		PathFinding(BiBestFirst, CycleTimes)
 	}
 }
-func BenchmarkPathPathFindingBiDijkstra(b *testing.B) {
+func BenchmarkPathFindingBiDijkstra(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(BiDijkstra, 1000)
+		PathFinding(BiDijkstra, CycleTimes)
 	}
 }
-func BenchmarkPathPathFindingJumpPoint(b *testing.B) {
+
+func BenchmarkPathFindingJumpPoint(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		PathFinding(JumpPoint, 1000)
+		PathFinding(JumpPoint, CycleTimes)
 	}
 }
 
@@ -72,7 +78,7 @@ func BenchmarkPathPathFindingJumpPoint(b *testing.B) {
 
 func PathFinding(cmd PathFindingType, count int) {
 	for i := 0; i < count; i++ {
-		m := GetMap(i / 3)
+		m := GetMap(i/3 + 1)
 		grid, startNode, endNode := GridFromString(m)
 		grid.PathFindingRoute(cmd)(startNode.X, startNode.Y, endNode.X, endNode.Y)
 	}
