@@ -1,9 +1,6 @@
 package main
 
-import (
-	"awesomeProject5/base"
-	"fmt"
-)
+import "awesomeProject5/example"
 
 func main() {
 
@@ -24,10 +21,11 @@ func main() {
 
 	//arr := &base.SortInt{99, 1, 2, 3, 7, 4, 5}
 
-	arr := []int{99, 1, 2, 3, 7, 4, 5}
-	//base.QuickSort(arr)
-	//base.InsertSort1(arr)
-	//fmt.Println(base.BinarySearch(arr, 100))
-	base.InsertSort1(arr)
-	fmt.Println(arr)
+	//arr := []int{99, 1, 2, 3, 7, 4, 5}
+	////base.QuickSort(arr)
+	//base.MergeSort1(arr)
+	////fmt.Println(base.BinarySearch(arr, 100))
+	////base.InsertSort1(arr)
+	//fmt.Println(arr)
+	example.AStar()
 }

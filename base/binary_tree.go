@@ -39,6 +39,7 @@ type BinaryTree struct {
 	Root *BinaryTreeNode
 	cmp  CompareFunc //比较
 }
+
 type BinaryTreeNode struct {
 	parent   *BinaryTreeNode //父节点
 	left     *BinaryTreeNode //左子节点
@@ -351,6 +352,7 @@ func (tree *BinaryTree) IsCompete() bool {
 	}
 	return true
 }
+
 func (tree *BinaryTree) Add(ele any) {
 	if tree.Root == nil {
 		tree.Root = NewBinaryTreeNode(ele, nil)

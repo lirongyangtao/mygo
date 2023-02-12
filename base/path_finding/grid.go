@@ -2,9 +2,10 @@ package path_finding
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
-	"time"
+	"strings"
 )
 
 const (
@@ -35,6 +36,67 @@ func (info *GridNodeInfo) GetPaths() (res []*GridNodeInfo) {
 		node = node.Parent
 	}
 	return
+}
+func (info *GridNodeInfo) ExpandPath(paths []*GridNodeInfo, m func(x, y int) *GridNodeInfo) (expanded []*GridNodeInfo) {
+
+	var (
+		length          = len(paths)
+		coord0, coord1  *GridNodeInfo
+		interpolated    [][]int
+		interpolatedLen int
+		i, j            int
+	)
+	if length < 2 {
+		return expanded
+	}
+	for i = 0; i < length-1; i++ {
+		coord0 = paths[i]
+		coord1 = paths[i+1]
+
+		interpolated = info.interpolate(coord0.X, coord0.Y, coord1.X, coord1.Y)
+		interpolatedLen = len(interpolated)
+		for j = 0; j < interpolatedLen-1; j++ {
+			expanded = append(expanded, m(interpolated[j][0], interpolated[j][1]))
+		}
+	}
+	expanded = append(expanded, paths[length-1])
+	return expanded
+}
+
+func (info *GridNodeInfo) interpolate(x0, y0, x1, y1 int) (lines [][]int) {
+	var (
+		abs                     = func(x int) int { return int(math.Abs(float64(x))) }
+		sx, sy, dx, dy, err, e2 int
+	)
+
+	dx = abs(x1 - x0)
+	dy = abs(y1 - y0)
+	sx = -1
+	if x0 < x1 {
+		sx = 1
+	}
+	sy = -1
+	if y0 < y1 {
+		sy = 1
+	}
+	err = dx - dy
+	for {
+		lines = append(lines, []int{x0, y0})
+		if x0 == x1 && y0 == y1 {
+			break
+		}
+
+		e2 = 2 * err
+		if e2 > -dy {
+			err = err - dy
+			x0 = x0 + sx
+		}
+		if e2 < dx {
+			err = err + dx
+			y0 = y0 + sy
+		}
+	}
+	return lines
 }
 
 // 一个格子存储的对象
@@ -141,13 +203,14 @@ func (grid *Grid) Clone() *Grid {
 func (grid *Grid) PathFindingRoute(cmd PathFindingType) (cmdFunc PathFindingCmd) {
 	wrap := func(f PathFindingCmd) PathFindingCmd {
 		return func(startX, startY, endX, endY int) (res []*GridNodeInfo) {
-			begin := time.Now()
+			//begin := time.Now()
 			res = f(startX, startY, endX, endY)
-			since := time.Since(begin)
-			fmt.Printf("%v: 耗时:%v\n", cmd, since)
+			//since := time.Since(begin)
+			//fmt.Printf("%v: 耗时:%v\n", cmd, since)
 			return res
 		}
 	}
+
 	switch cmd {
 	case AStar:
 		cmdFunc = grid.PathFindingAStar
@@ -161,14 +224,6 @@ func (grid *Grid) PathFindingRoute(cmd PathFindingType) (cmdFunc PathFindingCmd)
 		cmdFunc = grid.PathFindingBreadthFirst
 	case JumpPoint:
 		cmdFunc = grid.PathFindingJumpPoint
-	case JPFNeverMoveDiagonally:
-		cmdFunc = grid.PathFindingJPFNeverMoveDiagonally
-	case JPFMoveDiagonallyIfNoObstacles:
-		cmdFunc = grid.PathFindingJPFMoveDiagonallyIfNoObstacles
-	case JPFMoveDiagonallyIfAtMostOneObstacle:
-		cmdFunc = grid.PathFindingJPFMoveDiagonallyIfAtMostOneObstacle
-	case JPFAlwaysMoveDiagonally:
-		cmdFunc = grid.PathFindingJPFAlwaysMoveDiagonally
 	case BiAStar:
 		cmdFunc = grid.PathFindingBiAStar
 	case BiBreadthFirst:
@@ -333,4 +388,25 @@ func (grid *Grid) print(arr [][]string, enablePrint ...bool) string {
 		fmt.Printf("\r%v", str)
 	}
 	return str
+}
+
+func GridFromString(str string) (grid *Grid, startNode, endNode *GridNode) {
+	rows := strings.Split(str, "\n")
+	startX, startY := 0, 0
+	endX, endY := 0, 0
+	height := len(rows)
+	width := len(rows[0])
+	grid = NewGrid(width, height)
+	for i, row := range rows {
+		for j, v := range row {
+			if v == '1' {
+				grid.SetWalkableAt(j, i, false)
+			} else if v == 'e' {
+				endX, endY = j, i
+			} else if v == 's' {
+				startX, startY = j, i
+			}
+		}
+	}
+	return grid, grid.getNodeAt(startX, startY), grid.getNodeAt(endX, endY)
 }

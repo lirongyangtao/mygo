@@ -7,7 +7,7 @@ import (
 
 // A*算法
 func (grid *Grid) PathFindingAStar(startX, startY, endX, endY int) (res []*GridNodeInfo) {
-	openList := base.NewFourHeap(func(e1 interface{}, e2 interface{}) int32 {
+	openList := base.NewQuadHeap(func(e1 interface{}, e2 interface{}) int32 {
 		if e1.(*GridNodeInfo).F > e2.(*GridNodeInfo).F {
 			return base.E1GenerateE2
 		} else if e1.(*GridNodeInfo).F < e2.(*GridNodeInfo).F {

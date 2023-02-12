@@ -16,13 +16,13 @@ func (grid *Grid) PathFindingBiAStar(startX, startY, endX, endY int) (res []*Gri
 		}
 	}
 	//开始=================================
-	beginOpenList := base.NewFourHeap(cmp)
+	beginOpenList := base.NewQuadHeap(cmp)
 	startNode := grid.getNodeAt(startX, startY)
 	beginOpenList.Add(startNode.ToGridNodeInfo())
 	beginGridNodeInfo := map[*GridNode]*GridNodeInfo{}
 	beginClosed := map[*GridNode]struct{}{}
 	//结束=================================
-	EndOpenList := base.NewFourHeap(cmp)
+	EndOpenList := base.NewQuadHeap(cmp)
 
 	endNode := grid.getNodeAt(endX, endY)
 	EndOpenList.Add(endNode.ToGridNodeInfo())

@@ -1,6 +1,7 @@
 package base
 
 import (
+	"math"
 	"math/rand"
 )
 
@@ -192,8 +193,10 @@ func MergeSort1(data []int) {
 	if len(data) < 2 {
 		return
 	}
-	mergeSort1(data, 0, len(data))
+	mergeSort2(data, 0, len(data))
 }
+
+// 自顶向下的merge
 func mergeSort1(data []int, a, b int) {
 	if b-a < 2 {
 		return
@@ -234,6 +237,16 @@ func merge1(data []int, a, mid, b int) {
 	//覆盖原来的数组
 	for i := a; i < b; i++ {
 		data[i] = arr[i-a]
+	}
+}
+
+// 自底向上的merge
+func mergeSort2(data []int, a, b int) {
+	length := b - a
+	for sz := 1; sz <= length; sz += sz {
+		for i := 0; i+sz < length; i += sz + sz {
+			merge1(data, i, i+sz-1, int(math.Min(float64(i+sz+sz-1), float64(length))))
+		}
 	}
 }
 

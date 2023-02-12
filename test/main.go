@@ -1,12 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"os"
-	"os/exec"
-	"time"
-)
-
 //func main() {
 //	app := fiber.New()
 //
@@ -31,16 +24,16 @@ import (
 
 func main() {
 
-	for i := 0; i < 10000; i++ {
-		fmt.Printf("=====%v\n", i)
-		time.Sleep(1000 * time.Millisecond)
-		cmd := exec.Command("cmd", "/c", "cls")
-		cmd.Stdout = os.Stdout
-		err := cmd.Run()
-		if err != nil {
-			panic(err)
-		}
-
-	}
+	//for i := 0; i < 10000; i++ {
+	//	fmt.Printf("=====%v\n", i)
+	//	time.Sleep(1000 * time.Millisecond)
+	//	cmd := exec.Command("cmd", "/c", "cls")
+	//	cmd.Stdout = os.Stdout
+	//	err := cmd.Run()
+	//	if err != nil {
+	//		panic(err)
+	//	}
+	//
+	//}
 
 }
